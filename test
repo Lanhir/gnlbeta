@@ -1,0 +1,36 @@
+int     get_next_line(const int fd, char **line)
+{
+    char    *str;
+    int     a;
+    char    buff[BUFF_SIZE + 1];
+    int     b;
+
+    if (fd == -1 || line == NULL)
+        return (-1);
+    if (!(*str = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1))))
+        return (-1);
+    if (*str != '\0')
+        ft_strcpy(*line, str);
+    while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+    {
+        buff[b] = '\0';
+        str = ft_strjoin(str, buff);
+    }
+    a = 0;
+    if (str[a] != '\0')
+    {
+        while (str[a] != '\n' && str[a] != '\0')
+            a++;
+        if (a == 0)
+            (*line) = ft_strdup("");
+        else
+        {
+            (*line) = ft_strdup(str, 0, a);
+            str = &str[a + 1];
+        }
+        return (1);
+    }
+    else
+        (*line) = ft_strdup("");
+    return (0);
+}
