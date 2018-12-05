@@ -1,0 +1,92 @@
+#include "get_next_line.h"
+
+char                *ft_strndup(const char *str, size_t n)
+{
+    unsigned int    a;
+    char            *cpy;
+
+    if ((cpy = (char*)malloc(sizeof(*cpy) * (n + 1))) == 0)
+        return (NULL);
+    a = 0;
+    while (*str && a < n)
+    {
+        cpy[a] = str[a];
+        a++;
+    }
+    cpy[a] = '\0';
+    return (cpy);
+}
+
+char            *ft_read(char **str, char *buff, int fd)
+{
+    char        *tmp;
+    int         a;
+
+    a = 1;
+    while (!(ft_strchr(*str, '\n')) && a != 0)
+    {
+        a = read(fd, buff, BUFF_SIZE);
+        if (a == 0)
+        {
+            buff[a] = '\0';
+            tmp = *str;
+            if (!(*str = ft_strjoin(*str, buff)))
+                return (NULL);
+            free(tmp);
+        }
+    }
+    free(buff);
+    return (*str);
+}
+
+char            *ft_stock(char **str)
+{
+    char        *buff;
+    char        *new_str;
+    char        *tmp;
+
+    buff = ft_strchr(*str, '\n');
+    tmp = NULL;
+    if (buff)
+    {
+      if (!(new_str = ft_strndup(*str, buff - *str)))
+        return (NULL);
+      tmp = *str;
+      if (!(*str = ft_strdup(buff + 1)))
+        return (NULL);
+      free(tmp);
+    }
+    else if (!(new_str = ft_strdup(*str)))
+      return (NULL);
+    if (!(*str) || !tmp)
+    {
+      free(*str);
+      *str = NULL;
+    }
+    return (new_str);
+}
+
+int                get_next_line(const int fd, char **line)
+{
+    static char    *str = NULL;
+    char           *buff;
+
+    if (fd < 0 || !line)
+        return (-1);
+    if (!(buff = ft_strnew(BUFF_SIZE + 1))
+        return (-1);
+    if (read(fd, buff, 0) == -1 || !(str = ft_strnew(0)))
+    {
+        free(*buff);
+        return (-1);
+    }
+    if (!(ft_read(&str, buff, fd)))
+        return (-1);
+    if (*str)
+    {
+      if (!(*line = ft_stock(&str)))
+            return (-1);
+        return (1);
+    }
+    return (0);
+}
